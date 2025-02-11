@@ -1,2 +1,1 @@
-# PriceTracker
- 
+# Price and Availability Changes Tracker
