@@ -1,0 +1,9 @@
+beautifulsoup4
+requests
+selenium
+webdriver-manager
+pillow
+python-telegram-bot
+fake-useragent
+asyncio
+python-dotenv
