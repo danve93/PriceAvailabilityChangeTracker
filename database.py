@@ -77,9 +77,11 @@ def fetch_previous_details(url):
     row = cursor.fetchone()
     connection.close()
 
+    print(f"[DEBUG] fetch_previous_details({url}) returned: {row}")  # ✅ Add Debugging
+
     if row:
         try:
-            price = float(row[1]) if row[1] is not None else 0.0  # Ensure price is retrieved as a float
+            price = float(row[1]) if row[1] is not None else 0.0
         except ValueError:
             price = 0.0
 
@@ -90,7 +92,7 @@ def fetch_previous_details(url):
             "image_url": row[3],
             "last_updated": row[4]
         }
-    return None  # Return None if no previous data exists
+    return None  # ✅ Return `None` for new products
 
 # Check if a URL is already in the database
 def is_url_in_database(url):

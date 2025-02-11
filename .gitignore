@@ -11,3 +11,5 @@ checkdb.py
 products.db
 product_urls.py
 gamestop_urls.py
+product_urls_example.py
+gamestop_urls_example.py

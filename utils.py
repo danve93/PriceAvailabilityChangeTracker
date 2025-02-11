@@ -11,6 +11,18 @@ USER_AGENTS = [
     "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Edge/113.0.1774.57",
 ]
 
+KEYWORDS = [
+    "pokemon", "Evoluzioni Prismatiche", "scarlatto", "prismatiche", "Pok%C3%A9mon",
+    "Avventure Insieme", "Battle Partners", "Team Rocket", "Heat Wave Arena", "Rivali"
+]
+
+EXCLUDED_KEYWORDS = [
+    "random", "assortita", "assortite", "Heartforcards", "Pokemon-Company-International",
+    "Commercio", "Sammelkartenspiel", "Glurak"
+]
+
+EXCLUDED_URLS = ["https://www.amazon.it/gp/gc"]
+
 def clean_amazon_url(url):
     """Keep only the Amazon product page and the affiliate tag while removing unnecessary parameters."""
     parsed_url = urlparse(url)
@@ -26,25 +38,3 @@ def clean_amazon_url(url):
         clean_url += f"?{clean_query}"
 
     return clean_url
-
-KEYWORDS = ["pokemon", "Evoluzioni Prismatiche", "scarlatto", "prismatiche", "Pok%C3%A9mon","Avventure Insieme",
-            "Battle Partners","Team Rocket","Heat Wave Arena", "Rivali"]
-EXCLUDED_KEYWORDS = ["random","assortita", "assortite","Heartforcards","Pokemon-Company-International","Commercio", 
-                     "Sammelkartenspiel",  "Glurak"]
-EXCLUDED_URLS = ["https://www.amazon.it/gp/gc"]
-
-def clean_price(price):
-    """ Convert price from string to float, handling different formats. """
-    try:
-        if not price or price.strip() == "":
-            print(f"[DEBUG] Price is empty or unavailable: '{price}'")
-            return None
-
-        # Remove euro symbol, convert comma to dot
-        price = price.replace('€', '').replace(',', '.').strip()
-
-        # Convert to float
-        return float(price)
-    except ValueError as e:
-        print(f"[DEBUG] Price cleaning failed for '{price}'. Error: {e}")
-        return None

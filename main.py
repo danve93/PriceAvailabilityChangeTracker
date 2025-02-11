@@ -56,6 +56,9 @@ async def process_gamestop():
         logging.info("[INFO] GameStop scraping complete. Sleeping for 1 hour.")
         await asyncio.sleep(GAMESTOP_UPDATE_INTERVAL)
 
+print("[DEBUG] Initial product_urls:", product_urls)
+print("[DEBUG] Initial gamestop_urls:", gamestop_urls)
+
 async def track_products():
     """Main tracking function that processes Amazon and GameStop URLs."""
     last_heartbeat = asyncio.get_running_loop().time()
@@ -64,7 +67,7 @@ async def track_products():
         start_time = asyncio.get_running_loop().time()
         logging.debug("Fetching valid URLs...")
 
-        all_urls = gamestop_urls + product_urls
+        all_urls = product_urls + gamestop_urls 
         logging.debug(f"Total URLs to check: {len(all_urls)}")
 
         try:
@@ -84,12 +87,13 @@ async def track_products():
                             product_data = await get_amazon_product_details(url)
 
                         if product_data:
+                            # Fetch previous details before saving
+                            previous_details = fetch_previous_details(url)
+                            print(f"[DEBUG] Previous details for {url}: {previous_details}")
+
                             # Save the data in the database
                             save_product_details(url, product_data['title'], product_data['price'],
-                                                product_data['availability'], product_data['image_url'])
-
-                            # Retrieve the previous details
-                            previous_details = fetch_previous_details(url)
+                                                 product_data['availability'], product_data['image_url'])
 
                             # Verify saved data
                             print(f"[DEBUG] Saved product_data: {product_data}")
@@ -98,13 +102,19 @@ async def track_products():
 
                             # Evaluate whether to send a notification
                             should_notify, reason = should_send(product_data, previous_details)
-                            if should_notify:
-                                # Determine the source
-                                source = "GameStop" if "gamestop.it" in url else "Amazon"
+                            print(f"[DEBUG] Should send notification? {should_notify} (Reason: {reason})")
 
-                                # Send notification
-                                await send_to_telegram_with_image(product_data['title'], product_data['image_url'],
-                                                                product_data['price'], url, source)
+                            if should_notify:
+                                source = "GameStop" if "gamestop.it" in url else "Amazon"
+                                print(f"[INFO] ✅ Sending notification for {product_data['title']}...")
+
+                                await send_to_telegram_with_image(
+                                    product_data['title'], product_data['image_url'],
+                                    product_data['price'], url, source
+                                )
+                            else:
+                                print(f"[DEBUG] ❌ Notification NOT sent for {product_data['title']} (Reason: {reason})")
+
                     except Exception as e:
                         print(f"[ERROR] Error processing URL {url}: {e}")
 

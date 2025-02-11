@@ -41,47 +41,14 @@ def clean_url(url):
 
 def should_send(current_details, previous_details, price_change_threshold=0.05):
     """Determine whether a notification should be sent based on price or availability changes."""
-    print(f"[DEBUG] Entering should_send with current_details: {current_details}, previous_details: {previous_details}")
+    print(f"[DEBUG] should_send called with:\n - current_details: {current_details}\n - previous_details: {previous_details}")
 
     if not previous_details:
-        if current_details["title"] == "Unknown Product":
-            print("[DEBUG] should_send returning False: Title is 'Unknown Product'")
-            return False, "Title is 'Unknown Product'."
-        if not current_details["price"] or current_details["price"] == 0:
-            print("[DEBUG] should_send returning False: Price is unavailable")
-            return False, "Price is unavailable."
-        print("[DEBUG] should_send returning True: First-time product")
-        return True, "First-time product."
+        print("[DEBUG] No previous details found. This is a new product.")
+        return True, "New product detected."
 
-    price_changed = current_details["price"]!= previous_details["price"]
-    availability_changed = current_details["availability"]!= previous_details["availability"]
-
-    if price_changed:
-        try:
-            current_price = float(str(current_details["price"]).replace("€", "").replace(",", "."))
-            previous_price = float(str(previous_details["price"]).replace("€", "").replace(",", "."))
-            price_difference = abs(current_price - previous_price)
-
-            if previous_price!= 0:  # ✅ Check if previous_price is zero
-                price_change_percentage = price_difference / previous_price
-
-                if price_change_percentage >= price_change_threshold:
-                    print(f"[DEBUG] should_send returning True: Significant price change detected for {current_details['title']}")
-                    return True, "Significant price change detected."
-                else:
-                    print(f"[DEBUG] should_send returning False: Price change not significant for {current_details['title']}")
-                    return False, "Price change not significant"
-
-        except ValueError as e:
-            print(f"[ERROR] Failed to parse price: {e}")
-            return False, "Failed to parse price."
-
-    if availability_changed:
-        print(f"[DEBUG] should_send returning True: Availability change detected for {current_details['title']}")
-        return True, "Availability change detected."
-
-    print(f"[DEBUG] should_send returning False: No significant changes for {current_details['title']}")
-    return False, "No significant changes."
+    print("[DEBUG] No notification triggered. Check logic for issues.")
+    return False, "No significant changes detected."
 
 def process_image(image_url):
     """Download and process the image to fit within a square."""
