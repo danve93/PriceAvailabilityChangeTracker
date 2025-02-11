@@ -14,11 +14,8 @@ from email.mime.text import MIMEText
 import traceback
 load_dotenv()
 
-# Telegram bot credentials from environment variables
 TELEGRAM_BOT_TOKEN = os.getenv("TELEGRAM_BOT_TOKEN")
 TELEGRAM_CHANNEL_ID = os.getenv("TELEGRAM_CHANNEL_ID")
-
-# Email Configuration
 SMTP_SERVER = os.getenv("SMTP_SERVER", "smtp.gmail.com")
 SMTP_PORT = int(os.getenv("SMTP_PORT", 587))
 EMAIL_USERNAME = os.getenv("EMAIL_USERNAME")

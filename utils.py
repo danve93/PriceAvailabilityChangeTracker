@@ -2,6 +2,15 @@ from urllib.parse import urlparse, parse_qs, urlencode
 from dotenv import load_dotenv
 load_dotenv()
 
+USER_AGENTS = [
+    "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/114.0.0.0 Safari/537.36",
+    "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/113.0.0.0 Safari/537.36",
+    "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/112.0.0.0 Safari/537.36",
+    "Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101 Firefox/91.0",
+    "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7; rv:90.0) Gecko/20100101 Firefox/90.0",
+    "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Edge/113.0.1774.57",
+]
+
 def clean_amazon_url(url):
     """Keep only the Amazon product page and the affiliate tag while removing unnecessary parameters."""
     parsed_url = urlparse(url)
@@ -17,6 +26,12 @@ def clean_amazon_url(url):
         clean_url += f"?{clean_query}"
 
     return clean_url
+
+KEYWORDS = ["pokemon", "Evoluzioni Prismatiche", "scarlatto", "prismatiche", "Pok%C3%A9mon","Avventure Insieme",
+            "Battle Partners","Team Rocket","Heat Wave Arena", "Rivali"]
+EXCLUDED_KEYWORDS = ["random","assortita", "assortite","Heartforcards","Pokemon-Company-International","Commercio", 
+                     "Sammelkartenspiel",  "Glurak"]
+EXCLUDED_URLS = ["https://www.amazon.it/gp/gc"]
 
 def clean_price(price):
     """ Convert price from string to float, handling different formats. """

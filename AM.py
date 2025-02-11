@@ -9,11 +9,9 @@ import urllib3
 from bs4 import BeautifulSoup
 from urllib.parse import urljoin, urlparse
 from dotenv import load_dotenv
-
-# Load environment variables
+from utils import USER_AGENTS, KEYWORDS, EXCLUDED_KEYWORDS, EXCLUDED_URLS
 load_dotenv()
 
-# Disable SSL warnings (temporary fix)
 urllib3.disable_warnings(urllib3.exceptions.InsecureRequestWarning)
 
 # Force TLS 1.2+ for Amazon SSL issues
@@ -34,10 +32,6 @@ if REFERRAL_TAG is None:
 AMAZON_CATEGORY_URL = os.getenv("AMAZON_CATEGORY_URL")
 AMAZON_NEWEST_URL = os.getenv("AMAZON_NEWEST_URL")
 AMAZON_POKEMON_URL = os.getenv("AMAZON_POKEMON_URL")
-USER_AGENTS = os.getenv("USER_AGENTS")
-keywords =  os.getenv("KEYWORDS")
-excluded_keywords =  os.getenv("EXCLUDED_KEYWORDS")
-excluded_urls = os.getenv("EXCLUDED_URLS")
 
 # Path to product URLs file
 PRODUCT_URLS_FILE = "product_urls.py"
@@ -132,9 +126,9 @@ def update_urls():
     # Ensure URLs contain at least one keyword and exclude any unwanted ones
     filtered_new_urls = {
         url for url in new_urls
-        if any(keyword.lower() in url.lower() for keyword in keywords)
-        and not any(excluded_keyword.lower() in url.lower() for excluded_keyword in excluded_keywords)
-        and url not in excluded_urls
+        if any(keyword.lower() in url.lower() for keyword in KEYWORDS)
+        and not any(excluded_keyword.lower() in url.lower() for excluded_keyword in EXCLUDED_KEYWORDS)
+        and url not in EXCLUDED_URLS
     }
 
     print(f"[DEBUG] Filtered URLs after applying keyword and exclusion checks: {len(filtered_new_urls)}")

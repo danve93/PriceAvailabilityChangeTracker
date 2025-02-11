@@ -7,6 +7,7 @@ from product_urls import product_urls
 from gamestop_urls import gamestop_urls
 from gamestop import get_gamestop_product_data, start_selenium
 from amazon import get_amazon_product_details
+import os
 
 # Constants
 CHECK_INTERVAL = 60  # Time in seconds before checking for new updates

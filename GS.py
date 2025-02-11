@@ -6,14 +6,13 @@ from bs4 import BeautifulSoup
 from urllib.parse import urljoin, urlparse
 import json
 import os
-from utils import USER_AGENTS, keywords, excluded_keywords, excluded_urls
+from utils import USER_AGENTS
 from dotenv import load_dotenv
 from selenium import webdriver
 from selenium.webdriver.chrome.service import Service
 from selenium.webdriver.common.by import By
 from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
-from utils import USER_AGENTS  # ✅ Import USER_AGENTS from utils
 load_dotenv()
 
 # Base URLs for scraping
@@ -39,12 +38,10 @@ def start_selenium():
     chromium_driver = webdriver.Chrome(service=chromium_service, options=chromium_options)
     return chromium_driver
 
-
 def clean_gamestop_url(url):
     """Extract and clean the GameStop product URL, keeping only the base /Cards/Games/{ID}/ link."""
     match = re.search(r'(https://www\.gamestop\.it/Cards/Games/\d+)/', url)
     return match.group(1) + "/" if match else None
-
 
 def fetch_gamestop_product_links(category_url):
     """Fetch and extract unique product links using Selenium from a GameStop category/search page."""
@@ -82,7 +79,6 @@ def fetch_gamestop_product_links(category_url):
         print(f"[ERROR] Error fetching {category_url} using Selenium: {e}")
         return []
 
-
 def load_existing_urls():
     """Load existing URLs from gamestop_urls.py and ensure it's a list."""
     if not os.path.exists(PRODUCT_URLS_FILE):
@@ -97,7 +93,6 @@ def load_existing_urls():
     except Exception as e:
         print(f"[ERROR] Failed to read existing URLs: {e}")
     return []
-
 
 def update_urls():
     """Fetch new product links and merge them with existing URLs while ensuring uniqueness."""
@@ -114,7 +109,6 @@ def update_urls():
         f.write(f"gamestop_urls = {json.dumps(updated_urls, indent=4)}")
 
     print(f"[INFO] Updated URL list contains {len(updated_urls)} URLs.")
-
 
 if __name__ == "__main__":
     print("[INFO] Running GameStop scraper...")

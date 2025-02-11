@@ -2,14 +2,14 @@ import asyncio
 import random
 import time
 import re
+import os
 from selenium import webdriver
 from selenium.webdriver.chrome.service import Service
 from selenium.webdriver.common.by import By
 from selenium.webdriver.chrome.options import Options
 from dotenv import load_dotenv
 load_dotenv()
-
-USER_AGENTS = os.getenv("USER_AGENTS")
+from utils import USER_AGENTS
 
 def start_selenium():
     """Initialize and return a headless Selenium WebDriver."""
